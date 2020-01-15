@@ -25,14 +25,26 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room['outside'].n_to = 'foyer'
+room['outside'].e_to = None
+room['outside'].s_to = None
+room['outside'].w_to = None
+room['foyer'].s_to = 'outside'
+room['foyer'].n_to = 'overlook'
+room['foyer'].e_to = 'narrow'
+room['foyer'].w_to = None
+room['overlook'].s_to = 'foyer'
+room['overlook'].w_to = None
+room['overlook'].n_to = None
+room['overlook'].e_to = None
+room['narrow'].w_to = 'foyer'
+room['narrow'].n_to = 'treasure'
+room['narrow'].e_to = None
+room['narrow'].s_to = None
+room['treasure'].s_to = 'narrow'
+room['treasure'].w_to = None
+room['treasure'].e_to = None
+room['treasure'].n_to = None
 
 #
 # Main
@@ -52,3 +64,66 @@ p1 = Player('outside')
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+current_room = ""
+
+def start():
+    welcome_message = "Welcome to your adventure!"
+    print(welcome_message)
+
+def room_check():
+    global current_room
+    for x in room:
+        if x == p1.currentroom:
+            current_room = room.get(x)
+    print(f"{current_room.name}:")
+    print(current_room.description)
+
+def get_user_choice():
+    choice = input(" north | west | south | east | quit\n")
+    return choice
+
+def compare_choice_to_options():
+    global current_room
+    if user_choice == "north":
+        if room[p1.currentroom].n_to != None:
+            p1.currentroom = room[p1.currentroom].n_to
+        else:
+            print("There's no exit there!")
+    elif user_choice == "east":
+        if room[p1.currentroom].e_to != None:
+            p1.currentroom = room[p1.currentroom].e_to
+        else:
+            print("There's no exit there!")
+    elif user_choice == "south":
+        if room[p1.currentroom].s_to != None:
+            p1.currentroom = room[p1.currentroom].s_to
+        else:
+            print("There's no exit there!")
+    elif user_choice == "west":
+        if room[p1.currentroom].w_to != None:
+            p1.currentroom = room[p1.currentroom].w_to
+        else:
+            print("There's no exit there!")
+    else:
+        print("What was that?")
+
+def quit_game():
+    print("Thank you for playing!")
+
+
+start()
+room_check()
+
+print(p1.currentroom)
+
+user_choice = get_user_choice()
+
+while user_choice != "quit":
+    compare_choice_to_options()
+    room_check()
+    user_choice = get_user_choice()
+
+quit_game()
+        
+
