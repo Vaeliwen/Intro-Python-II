@@ -52,7 +52,7 @@ room['treasure'].n_to = None
 
 # Make a new player object that is currently in the 'outside' room.
 
-p1 = Player('outside')
+p1 = Player('Hero', 'outside')
 
 # Write a loop that:
 #
@@ -68,7 +68,7 @@ p1 = Player('outside')
 current_room = ""
 
 def start():
-    welcome_message = "Welcome to your adventure!"
+    welcome_message = f"Welcome to your adventure, {p1.name}!"
     print(welcome_message)
 
 def room_check():
