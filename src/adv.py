@@ -7,7 +7,7 @@ from item import Item
 room = {
     'outside':  Room("Outside Cave Entrance",
                     "North of you, the cave mount beckons", 
-                    [Item("a sword", "A steel sword."), Item("a breastplate", "A steel breastplate."), Item("a bow", "A wooden bow.")]),
+                    [Item("sword", "A steel sword."), Item("breastplate", "A steel breastplate."), Item("bow", "A wooden bow.")]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -85,31 +85,40 @@ def room_check():
             print(f"There is {item.name} on the ground!")
 
 def get_user_choice():
-    choice = input(" north | west | south | east | quit\n")
+    choice = input(" north | west | south | east | take | look at | quit\n").split()
     return choice
 
 def compare_choice_to_options():
     global current_room
-    if user_choice == "north":
+    if user_choice == ["north"]:
         if room[p1.currentroom].n_to != None:
             p1.currentroom = room[p1.currentroom].n_to
         else:
             print("There's no exit there!")
-    elif user_choice == "east":
+    elif user_choice == ["east"]:
         if room[p1.currentroom].e_to != None:
             p1.currentroom = room[p1.currentroom].e_to
         else:
             print("There's no exit there!")
-    elif user_choice == "south":
+    elif user_choice == ["south"]:
         if room[p1.currentroom].s_to != None:
             p1.currentroom = room[p1.currentroom].s_to
         else:
             print("There's no exit there!")
-    elif user_choice == "west":
+    elif user_choice == ["west"]:
         if room[p1.currentroom].w_to != None:
             p1.currentroom = room[p1.currentroom].w_to
         else:
             print("There's no exit there!")
+    elif user_choice[0] == "get":
+        for item in current_room.items:
+            if item.name == user_choice[1]:
+                p1.items.append(Item(item.name, item.description))
+                room[p1.currentroom].items.remove(Item(item.name, item.description))
+            else:
+                pass
+
+    #elif user_choice == "drop"
     else:
         print("What was that?")
 
@@ -122,7 +131,8 @@ room_check()
 
 user_choice = get_user_choice()
 
-while user_choice != "quit":
+
+while user_choice != ["quit"]:
     compare_choice_to_options()
     room_check()
     user_choice = get_user_choice()
