@@ -1,11 +1,13 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                    "North of you, the cave mount beckons", 
+                    [Item("a sword", "A steel sword."), Item("a breastplate", "A steel breastplate."), Item("a bow", "A wooden bow.")]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -78,6 +80,9 @@ def room_check():
             current_room = room.get(x)
     print(f"{current_room.name}:")
     print(current_room.description)
+    if current_room.items != None:
+        for item in current_room.items:
+            print(f"There is {item.name} on the ground!")
 
 def get_user_choice():
     choice = input(" north | west | south | east | quit\n")
@@ -114,8 +119,6 @@ def quit_game():
 
 start()
 room_check()
-
-print(p1.currentroom)
 
 user_choice = get_user_choice()
 
