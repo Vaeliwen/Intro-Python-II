@@ -82,14 +82,15 @@ def room_check():
     print(current_room.description)
     if current_room.items != None:
         for item in current_room.items:
-            print(f"There is {item.name} on the ground!")
+            print(f"There is a {item.name} on the ground!")
 
 def get_user_choice():
-    choice = input(" north | west | south | east | take | look at | quit\n").split()
+    choice = input(" north | west | south | east | get [ITEM NAME] | drop [ITEM NAME] | quit\n").split()
     return choice
 
 def compare_choice_to_options():
     global current_room
+    global room
     if user_choice == ["north"]:
         if room[p1.currentroom].n_to != None:
             p1.currentroom = room[p1.currentroom].n_to
@@ -111,14 +112,29 @@ def compare_choice_to_options():
         else:
             print("There's no exit there!")
     elif user_choice[0] == "get":
-        for item in current_room.items:
-            if item.name == user_choice[1]:
-                p1.items.append(Item(item.name, item.description))
-                room[p1.currentroom].items.remove(Item(item.name, item.description))
-            else:
-                pass
-
-    #elif user_choice == "drop"
+        if current_room.items != None:
+            for item in current_room.items:
+                if item.name == user_choice[1]:
+                    p1.items.append(Item(item.name, item.description))
+                    current_room.items.remove(item)
+                    room[p1.currentroom].items = current_room.items
+                    print(f"You pick up the {item.name}, and add it to your inventory!")
+                else:
+                    pass
+        else:
+            print(f"There's no items in the room, {p1.name}!")
+    elif user_choice[0] == "drop":
+        if p1.items != None:
+            for item in p1.items:
+                if item.name == user_choice[1]:
+                    p1.items.remove(item)
+                    current_room.items.append(Item(item.name, item.description))
+                    room[p1.currentroom].items = current_room.items
+                    print(f"You place your {item.name} on the ground in the {current_room.name}.")
+                else:
+                    pass
+        else:
+            print(f"You need an item in your inventory to drop something!")
     else:
         print("What was that?")
 
